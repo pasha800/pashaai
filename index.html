@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="description" content="وێبسایتێکی ئۆفلاین بۆ چاتکردن لەگەڵ زیرەکییەکی دەستکرد؛ زانیاریی بەڕێوەبەر و Knowledge Pack ـی گشتی لە IndexedDB هەڵدەگرێت." />
+  <title>زیرەکی ئۆفلاین</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">AI</div>
+        <div>
+          <h1>زیرەکی ئۆفلاین</h1>
+          <p>چات، فێرکردن، گەڕان و وەڵامدانەوە ـ بە تەواوی بێ ئینتەرنێت</p>
+        </div>
+      </div>
+      <div class="status-pill" id="offlineStatus">ئامادەی ئۆفلاین</div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar" aria-label="ناوبەری">
+        <button class="nav-btn active" data-page="chatPage">چات</button>
+        <button class="nav-btn" data-page="trainingPage">فێرکردنی زیرەکی</button>
+        <button class="nav-btn" data-page="knowledgePage">بنکەی زانیاری</button>
+        <button class="nav-btn" data-page="dashboardPage">داشبۆرد</button>
+        <button class="nav-btn" data-page="settingsPage">ڕێکخستنەکان</button>
+        <div class="sidebar-note">
+          <strong>تێبینی</strong>
+          <span>دوای دابەزاندنی یەکەم، چات و گەڕان بە تەواوی ئۆفلاین کار دەکات. زانیاریی گشتی لە IndexedDB هەڵدەگیرێت.</span>
+        </div>
+      </aside>
+
+      <section class="content">
+        <section id="chatPage" class="page active-page">
+          <div class="panel hero-panel">
+            <div>
+              <h2>چات لەگەڵ زیرەکییەکە</h2>
+              <p>وەڵامەکان لەسەر زانیاریی بەڕێوەبەر و زانیاریی گشتیی تێکست هەڵگیراو دەبن؛ بۆ پرسیاری بنەڕەتی پێناسەی ڕاستەوخۆ پێشەنگی دەبێت.</p>
+            </div>
+            <button id="newChatBtn" class="secondary-btn">چاتی نوێ</button>
+          </div>
+
+          <div class="chat-grid">
+            <div class="chat-card panel">
+              <div id="chatWindow" class="chat-window" aria-live="polite"></div>
+              <form id="chatForm" class="chat-form">
+                <textarea id="chatInput" rows="2" placeholder="پرسیارەکەت بنووسە..." required></textarea>
+                <button class="primary-btn" type="submit">بینێرە</button>
+              </form>
+            </div>
+            <aside class="panel assistant-tools">
+              <h3>تواناکانی چات</h3>
+              <ul>
+                <li>گەڕانی زیرەک لە نێو زانیاریی فێرکراو</li>
+                <li>پیشاندانی سەرچاوە و پلەی دڵنیایی</li>
+                <li>وەڵامدانەوە تەنها لەسەر زانیاریی ناوخۆیی</li>
+                <li>کارکردن بە تەواوی ئۆفلاین</li>
+                <li>دابەزاندنی Knowledge Pack ـی تێکست لە سێرڤەر و هەڵگرتن لە IndexedDB</li>
+              </ul>
+              <div class="quick-prompts">
+                <button data-prompt="ئەم سیستەمە چی دەزانێت؟">ئەم سیستەمە چی دەزانێت؟</button>
+                <button data-prompt="چۆن دەتوانم زانیاری نوێ زیاد بکەم؟">چۆن زانیاری زیاد بکەم؟</button>
+                <button data-prompt="ئەگەر وەڵام نەزانیت چی دەکەیت؟">ئەگەر نەزانیت؟</button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="trainingPage" class="page">
+          <div class="panel hero-panel">
+            <div>
+              <h2>فێرکردنی زیرەکی</h2>
+              <p>بەڕێوەبەر دەتوانێت بە نوسین زانیاری زیاد بکات؛ دواتر زیرەکییەکە بەکارهێنەر وەڵام دەداتەوە.</p>
+            </div>
+            <div id="adminState" class="status-pill muted">بەڕێوەبەر داخڵ نەبووە</div>
+          </div>
+
+          <div class="admin-login panel" id="loginPanel">
+            <h3>چوونەژوورەوەی بەڕێوەبەر</h3>
+            <p>وشەی نهێنیی سەرەتایی: <code>admin123</code>. لە ڕێکخستنەکان دەتوانیت بیگۆڕیت.</p>
+            <form id="loginForm" class="inline-form">
+              <input type="password" id="adminPassword" placeholder="وشەی نهێنی" required />
+              <button type="submit" class="primary-btn">چوونەژوورەوە</button>
+            </form>
+          </div>
+
+          <div class="training-grid" id="trainingArea" hidden>
+            <form id="knowledgeForm" class="panel form-panel">
+              <h3 id="formTitle">زانیاری نوێ فێر بکە</h3>
+              <input type="hidden" id="knowledgeId" />
+              <label>ناونیشان
+                <input id="titleInput" type="text" placeholder="نمونە: ڕێنمایی باج / Badge" required />
+              </label>
+              <label>بەش / هاوپۆل
+                <input id="categoryInput" type="text" placeholder="نمونە: HR، IT، یاسا، فڕۆکەخانە..." />
+              </label>
+              <label>پرسیاری سەرەکی
+                <input id="questionInput" type="text" placeholder="بەکارهێنەر چی دەپرسێت؟" required />
+              </label>
+              <label>وەڵامی فێرکراو
+                <textarea id="answerInput" rows="5" placeholder="وەڵامی ڕاست و تەواو بنووسە..." required></textarea>
+              </label>
+              <label>زانیاریی زیاتر / تێبینی
+                <textarea id="contentInput" rows="4" placeholder="وردەکاری، هەنگاوەکان، مەرجەکان، پەیوەندییەکان..."></textarea>
+              </label>
+              <label>تاگ / وشەی کلیلە، بە کۆما جیا بکەوە
+                <input id="tagsInput" type="text" placeholder="badge, airport, باج، مۆڵەت" />
+              </label>
+              <label>گرنگی
+                <select id="priorityInput">
+                  <option value="1">ئاسایی</option>
+                  <option value="2">گرنگ</option>
+                  <option value="3">زۆر گرنگ</option>
+                </select>
+              </label>
+              <div class="form-actions">
+                <button type="submit" class="primary-btn">فێری بکە / پاشەکەوت</button>
+                <button type="button" id="resetFormBtn" class="secondary-btn">پاککردنی فۆرم</button>
+              </div>
+            </form>
+
+            <div class="panel smart-panel">
+              <h3>فێرکردنی خێرا</h3>
+              <p>تێکستێکی درێژ بنووسە؛ سیستمەکە بە شێوەیەکی خۆکار ناونیشان، پرسیار و وەڵام دەست پێدەکات.</p>
+              <textarea id="quickText" rows="9" placeholder="زانیارییەکە لێرە بنووسە..."></textarea>
+              <button id="smartFillBtn" class="secondary-btn">فۆرم پڕبکەرەوە</button>
+              <hr />
+              <h3>تاقیکردنەوەی زانیاری</h3>
+              <input id="testQuery" type="text" placeholder="پرسیارێک بنووسە بۆ تاقیکردنەوە" />
+              <button id="testSearchBtn" class="secondary-btn">گەڕان</button>
+              <div id="testResults" class="test-results"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="knowledgePage" class="page">
+          <div class="panel hero-panel">
+            <div>
+              <h2>بنکەی زانیاری</h2>
+              <p>هەموو ئەو زانیاریانەی زیرەکییەکە لێیان فێر بووە.</p>
+            </div>
+            <div class="toolbar">
+              <input id="knowledgeSearch" type="search" placeholder="گەڕان لە زانیاری..." />
+              <button id="exportBtn" class="secondary-btn">هەناردەکردن</button>
+              <label class="file-btn">هاوردەکردن
+                <input id="importInput" type="file" accept="application/json" />
+              </label>
+            </div>
+          </div>
+          <div id="knowledgeList" class="knowledge-list"></div>
+        </section>
+
+        <section id="dashboardPage" class="page">
+          <div class="panel hero-panel">
+            <div>
+              <h2>داشبۆرد</h2>
+              <p>چاوەدێریی گشتی بۆ ئەوەی بزانیت زیرەکییەکە چی فێر بووە.</p>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card panel"><span id="statKnowledge">0</span><p>بابەتی فێرکراو</p></div>
+            <div class="stat-card panel"><span id="statCategories">0</span><p>بەش / هاوپۆل</p></div>
+            <div class="stat-card panel"><span id="statChats">0</span><p>نامەی چات</p></div>
+            <div class="stat-card panel"><span id="statGeneralKnowledge">0</span><p>بابەتی زانیاریی گشتی</p></div>
+            <div class="stat-card panel"><span id="statStorage">0 KB</span><p>قەبارەی localStorage</p></div>
+          </div>
+          <div class="panel">
+            <h3>هاوپۆلەکان</h3>
+            <div id="categoryChart" class="category-chart"></div>
+          </div>
+        </section>
+
+        <section id="settingsPage" class="page">
+          <div class="panel hero-panel">
+            <div>
+              <h2>ڕێکخستنەکان</h2>
+              <p>پاراستن، پاشەکەوت، پاککردنەوە و گۆڕینی ڕەفتاری چات.</p>
+            </div>
+          </div>
+          <div class="settings-grid">
+            <div class="panel form-panel">
+              <h3>ڕەفتاری وەڵامدانەوە</h3>
+              <label>ناوی زیرەکی
+                <input id="botNameInput" type="text" />
+              </label>
+              <label>کەمترین پلەی دڵنیایی بۆ وەڵامدانەوە
+                <input id="thresholdInput" type="range" min="5" max="80" step="1" />
+                <span id="thresholdLabel"></span>
+              </label>
+              <label>شێوازی وەڵامدانەوە
+                <select id="styleInput">
+                  <option value="human">مرۆڤانە و سروشتی</option>
+                  <option value="formal">فەرمی</option>
+                  <option value="brief">کورت و پوخت</option>
+                </select>
+              </label>
+              <label>ژمارەی سەرچاوەی پیشاندراو
+                <input id="maxSourcesInput" type="range" min="1" max="8" step="1" />
+                <span id="maxSourcesLabel"></span>
+              </label>
+              <label class="check-row">
+                <input id="sourceToggle" type="checkbox" />
+                پیشاندانی سەرچاوەکان لە وەڵام
+              </label>
+              <label class="check-row">
+                <input id="humanModeToggle" type="checkbox" />
+                وەڵامدانەوە بە هەست و کەمێک دوواکەوتنی سروشتی
+              </label>
+              <label class="check-row">
+                <input id="clarifyToggle" type="checkbox" />
+                ئەگەر دڵنیا نەبوو، پرسیاری ڕوونکردنەوە بکات
+              </label>
+              <button id="saveSettingsBtn" class="primary-btn">پاشەکەوتی ڕێکخستن</button>
+            </div>
+            <div class="panel form-panel knowledge-pack-panel">
+              <h3>زانیاریی گشتیی ژیان / Knowledge Pack</h3>
+              <p>لە یەکەم کردنەوەدا manifest دەخوێنرێتەوە و پارچەکانی JSONL لە IndexedDB هەڵدەگیرێن. پەکی ٢GB دەبێت تەنها تێکست بێت: JSONL، بێ وێنە، بێ ڤیدیۆ، بێ HTML. پەکی ناوخۆیی تەنها fallback ـی بچووکە بۆ کاتی file:// یان CORS.</p>
+              <label>لینکی manifest لە سێرڤەر یان فایلی ناوخۆیی
+                <input id="packManifestUrlInput" type="text" inputmode="url" placeholder="knowledge-pack/manifest.json یان https://example.com/knowledge-pack/manifest.json" />
+              </label>
+              <label>زۆرترین کاندید بۆ گەڕانی زانیاریی گشتی
+                <input id="maxGeneralCandidatesInput" type="range" min="20" max="160" step="10" />
+                <span id="maxGeneralCandidatesLabel"></span>
+              </label>
+              <label class="check-row">
+                <input id="autoPackToggle" type="checkbox" />
+                لە یەکەم کردنەوەدا manifest/Knowledge Pack خۆکار دایبگرە
+              </label>
+              <label class="check-row">
+                <input id="autoInternetToggle" type="checkbox" />
+                ئەگەر ئینتەرنێت هەبوو، خۆکار لە Wikipedia زانیاریی گشتی فێربێت
+              </label>
+              <label>ئامانجی فێربوونی ئینتەرنێت بە GB
+                <input id="internetTargetGbInput" type="number" min="0.05" max="2" step="0.05" />
+                <small>٢GB ـەکە تەنها تێکستە. پێویستە براوزەر/ئامێر نزیکەی ٢GB+ شوێنی IndexedDB هەبێت.</small>
+              </label>
+              <div class="pack-progress" aria-live="polite">
+                <strong id="packStatus">هێشتا زانیاریی گشتی دابەزێنراو نییە</strong>
+                <div class="progress-track"><span id="packProgressBar"></span></div>
+                <small id="packProgressText"></small>
+                <small id="packDetails"></small>
+              </div>
+              <div class="form-actions">
+                <button id="downloadPackBtn" class="secondary-btn" type="button">دابەزاندن/نوێکردنەوە</button>
+                <button id="installBundledPackBtn" class="secondary-btn" type="button">دامەزراندنی پەکی ناوخۆیی</button>
+                <button id="checkManifestBtn" class="secondary-btn" type="button">پشکنینی manifest/CORS</button>
+                <button id="internetBootstrapBtn" class="secondary-btn" type="button">فێربوون لە ئینتەرنێت - تێکست</button>
+                <button id="stopInternetBootstrapBtn" class="secondary-btn danger-lite" type="button">وەستاندنی فێربوون</button>
+                <button id="clearPackBtn" class="secondary-btn danger-lite" type="button">پاککردنی زانیاریی گشتی</button>
+              </div>
+            </div>
+            <div class="panel form-panel">
+              <h3>پاراستنی بەڕێوەبەر</h3>
+              <label>وشەی نهێنیی نوێ
+                <input id="newPasswordInput" type="password" placeholder="وشەی نهێنیی نوێ" />
+              </label>
+              <button id="changePasswordBtn" class="secondary-btn">گۆڕینی وشەی نهێنی</button>
+              <button id="logoutBtn" class="secondary-btn danger-lite">چوونەدەرەوە</button>
+            </div>
+            <div class="panel form-panel danger-zone">
+              <h3>ناوچەی مەترسیدار</h3>
+              <p>ئەم کردارەکان لەسەر ئەم براوسەرە جێبەجێ دەبن.</p>
+              <button id="seedBtn" class="secondary-btn">زیادکردنی زانیاریی نمونە</button>
+              <button id="clearChatBtn" class="secondary-btn">پاککردنی مێژووی چات</button>
+              <button id="wipeBtn" class="danger-btn">پاککردنی هەموو زانیاری</button>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <template id="messageTemplate">
+    <article class="message">
+      <div class="avatar"></div>
+      <div class="bubble"></div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

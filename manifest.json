@@ -1,0 +1,13 @@
+{
+  "name": "زیرەکی ئۆفلاین - Text-only Knowledge Pack",
+  "short_name": "Offline AI Text",
+  "description": "زیرەکی ئۆفلاین بە فێرکردنی بەڕێوەبەر و Knowledge Pack ـی تێکست لە IndexedDB",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "dir": "rtl",
+  "lang": "ckb",
+  "background_color": "#0b1020",
+  "theme_color": "#111827",
+  "icons": [],
+  "version": "2026.06.16.5"
+}

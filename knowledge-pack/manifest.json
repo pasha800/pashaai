@@ -1,0 +1,27 @@
+{
+  "name": "Core Life Knowledge Starter Pack",
+  "version": "2026.06.16.5",
+  "language": "ckb",
+  "format": "jsonl-offline-ai-v1",
+  "description": "پەکی ناوخۆییی چاککراو: پێناسەی بنەڕەتییەکان و زانیاریی گشتی. ئەمە fallback ـی بچووکە؛ پەکی ٢GBی تەنها تێکست بە tools/build-web-knowledge-pack.js دروست بکە.",
+  "totalDocs": 80,
+  "totalBytes": 56298,
+  "chunks": [
+    {
+      "url": "chunk-0001.jsonl",
+      "bytes": 25579,
+      "sha256": "287cc4cd1623f9a9a982e8945ff9966e02232563080aab54cdb320ff39c1e9c9"
+    },
+    {
+      "url": "chunk-0002.jsonl",
+      "bytes": 25906,
+      "sha256": "b2e815a616e795e33ba28bd05685079b75ac2c56a777de088853accdcceb7459"
+    },
+    {
+      "url": "chunk-0003.jsonl",
+      "bytes": 4813,
+      "sha256": "ce6745f7d7aa7b71ecf48b8eb4198d9dd41ff428fdfb2081bb91c3c0717c0d2f"
+    }
+  ],
+  "textOnly": true
+}
